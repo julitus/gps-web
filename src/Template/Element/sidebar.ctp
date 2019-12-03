@@ -11,7 +11,7 @@
         <?= $this->Html->link('<i class="fa fa-mobile"></i> <span>Dispositivos</span>', ['controller' => 'users', 'action' => 'devices'], ['escape' => false]) ?>
       </li>
       <li>
-        <?= $this->Html->link('<i class="fa fa-sign-out"></i> <span>Cerrar Sessión</span>', ['controller' => 'users', 'action' => 'login'], ['escape' => false]) ?>
+        <?= $this->Html->link('<i class="fa fa-sign-out"></i> <span>Cerrar Sessión</span>', ['controller' => 'users', 'action' => 'logout'], ['escape' => false]) ?>
       </li>
     </ul>
   </section>

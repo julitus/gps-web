@@ -12,6 +12,14 @@
     width: 160px;
     height: 160px;
 }
+.message.error, .message.success {
+	padding: 5px 10px;
+	margin: 0px 5px 5px 5px;
+	background-color: rgba(60, 63, 72, 0.2);
+	text-align: center;
+	border-radius: 10px;
+	cursor: pointer;
+}
 .navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > div .img-circle {
     margin: auto 10px auto auto;
     text-align: center;
