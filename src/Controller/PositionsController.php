@@ -21,15 +21,13 @@ class PositionsController extends AppController
     public function locations()
     {
         $positions = $this->Positions->find()
+            ->select(['Positions__created' => 'DISTINCT ON(Positions.user_id) user_id, Positions.created', 'Positions.lat', 'Positions.lng', 'Users.id', 'Users.name'])
             ->where(['Positions.master_id' => $this->request->session()->read('Auth.User.id')])
             ->contain(['Users'])
-            ->order(['Positions.created' => 'DESC']);
+            ->order(['Positions.user_id', 'Positions.created' => 'DESC']);
 
         $this->set(compact('positions'));
         $this->set('_serialize', ['positions']);
-
-        /*debug($positions->toArray());
-        exit();*/
     }
 
     /**

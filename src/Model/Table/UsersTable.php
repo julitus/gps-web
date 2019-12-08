@@ -92,6 +92,10 @@ class UsersTable extends Table
             ->maxLength('phone', 255);
 
         $validator
+            ->scalar('key')
+            ->maxLength('key', 16);
+
+        $validator
             ->scalar('name')
             ->minLength('name', 2)
             ->maxLength('name', 255)

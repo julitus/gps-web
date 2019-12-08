@@ -51,19 +51,29 @@ class RestUsersController extends AppController
         $message = 'Error interno del servidor';
         $response = null;
 
-        if (isset($this->request->data['name']) and isset($this->request->data['email']) and isset($this->request->data['password']) and isset($this->request->data['phone'])) {
+        if (isset($this->request->data['name']) and isset($this->request->data['email']) and isset($this->request->data['password']) and isset($this->request->data['phone']) and isset($this->request->data['key'])) {
 
-            $user = $this->Users->newEntity();
+        	$master = $this->Users->find()->where(['Users.key' => $this->request->data['key']])->first();
+
+        	if (!is_null($master)) {
+
+        		$user = $this->Users->newEntity();
             
-            $this->request->data['role'] = 2;
-            $this->request->data['master_id'] = 1;
-            $this->request->data['repassword'] = $this->request->data['password'];
-            $user = $this->Users->patchEntity($user, $this->request->data);
-            if ($user = $this->Users->save($user)) {
-                $status = '200';
-                $message = 'Ok';
-                $response = $user;
-            }
+	            $this->request->data['role'] = 2;
+	            $this->request->data['master_id'] = $master->id;
+	            $this->request->data['repassword'] = $this->request->data['password'];
+	            $user = $this->Users->patchEntity($user, $this->request->data);
+	            if ($user = $this->Users->save($user)) {
+	                $status = '200';
+	                $message = 'Ok';
+	                $response = $user;
+	            }
+
+        	} else {
+        		$status = '401';
+                $message = 'La llave no existe.';
+        	}
+
         }
 
         $this->set([

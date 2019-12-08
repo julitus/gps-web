@@ -1,7 +1,7 @@
-<section class="content-header">
+<section class="content-header gps-page" data-sidebar="devices">
   <h1>
     Dispositivos Asociados
-    <small></small>
+    <small class="keys"> <span class="pull-right-container"><small class="label pull-left bg-yellow">Token :</small></span> <b><?= $this->request->session()->read('Auth.User.key') ?></b></small>
   </h1>
 </section>
 

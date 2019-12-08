@@ -41,6 +41,7 @@ class User extends Entity
         'master_id' => true,
         'location' => true,
         'news' => true,
+        'key' => true,
         'created' => true,
         'master' => true,
         'positions' => true

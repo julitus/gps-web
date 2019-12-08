@@ -353,58 +353,69 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 })
 
-function initGoogleMaps($idDiv, $commerce, $zoom){
-    var myLatlng = new google.maps.LatLng($commerce['lat'], $commerce['lng']);
+function initGoogleMaps($idDiv, $positions, $zoom){
+
+    var url = "http://maps.google.com/mapfiles/ms/icons/";
+    var colors = ["yellow", "orange", "red", "pink", "purple", "blue", "lightblue", "green"];
+
     var mapOptions = {
       zoom: $zoom,
-      center: myLatlng,
       scrollwheel: false, //we disable de scroll over the map, it is a really annoing when you scroll through page
       styles: [{"featureType":"water","stylers":[{"saturation":43},{"lightness":-11},{"hue":"#0088ff"}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"hue":"#ff0000"},{"saturation":-100},{"lightness":99}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"color":"#808080"},{"lightness":54}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#ece2d9"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#ccdca1"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#767676"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#b8cb93"}]},{"featureType":"poi.park","stylers":[{"visibility":"on"}]},{"featureType":"poi.sports_complex","stylers":[{"visibility":"on"}]},{"featureType":"poi.medical","stylers":[{"visibility":"on"}]},{"featureType":"poi.business","stylers":[{"visibility":"simplified"}]}]
 
-    }
+    };
 
+    var bounds = new google.maps.LatLngBounds();
     var map = new google.maps.Map(document.getElementById($idDiv), mapOptions);
+    var markers = [];
 
-    var marker = new google.maps.Marker({
-        position: myLatlng,
-        title: $commerce['name']
+    $.each($positions, function( index, value ) {
+        markers.push([value['name'], value['lat'], value['lng'], value['date']]);
     });
 
-    /*var infoWindow = new google.maps.InfoWindow(), marker;
+    for( i = 0; i < markers.length; i++ ) {
+        var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+        bounds.extend(position);
+        marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: markers[i][0] + " (" + markers[i][3] + ")",
+            icon: {                             
+                url: url + colors[i % colors.length] + "-dot.png"
+            }
+            /*label: {
+              text: '$' + $stores[i]['final_price'],
+              color: '#00ad45',
+              fontSize: '13px',
+              fontWeight: '700'
+            },*/
+        });
+    }
 
-    var infoWindowContent = [
-        '<div class="info-content-map">' +
-          '<h3>' + $commerce['name'] + '</h3>' +
-          '<p><span class="text-success"><small>Dirección:</small></span> ' + $commerce['address'] + '</p>' + 
-          '<p><span class="text-success"><small>Teléfono:</small></span> ' + $commerce['phone'] + '</p>' + 
-          '<p><span class="text-success"><small>Calificación:</small></span> ' + $commerce['rating'] + '</p>' + 
-        '</div>'
-      ];
-
-    google.maps.event.addListener(marker, 'click', (function(marker) {
-        return function() {
-            infoWindow.setContent(infoWindowContent[0]);
-            infoWindow.open(map, marker);
-        }
-    })(marker));*/
-
-    // To add the marker to the map, call setMap();
-    marker.setMap(map);
+    map.fitBounds(bounds);
 }
 
 
 $( document ).ready(function() {
 
+    var e;
+
+    if ($('.gps-page').length > 0) {
+        e = $('.gps-page').data("sidebar");
+        if ($('#gps-' + e).length > 0) {
+            $('#gps-' + e).addClass("active");
+        }
+    }
+
     if ($('#map').length > 0) {
         //$().ready(function(){
-            /*var $commerce = $('#map').data("commerce");
-            $commerce['address'] = ($commerce['address'] == '' ? 'ninguna' : $commerce['address']);
-            $commerce['phone'] = ($commerce['phone'] == '' ? '--' : $commerce['phone']);
-            $commerce['rating'] = ($commerce['rating'] == 0 ? 'sin evaluar' : $commerce['rating']);*/
-            //console.log($('#map').data("positions"));
-            //var $commerce = {lat: "-16.4369718", lng: "-71.5282692", name: "gfhj"}
-            var $commerce = $('#map').data("positions");
-            initGoogleMaps('map', $commerce, 16);
+            var $positions = $('#map').data("positions");
+            console.log($positions);
+            if ($positions.length > 0) {
+                initGoogleMaps('map', $positions, 16);
+            } else {
+                $('.map #map').html('<span style="margin: 20px;">No tiene ningun dispositivo agregado.</span>');
+            }
         //});
     }
 

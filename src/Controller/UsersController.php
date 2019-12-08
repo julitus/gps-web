@@ -138,10 +138,15 @@ class UsersController extends AppController
             $user = $this->Users->patchEntity($user, $this->request->getData());
             $user->role = 1;
             if ($user = $this->Users->save($user)) {
+                
+                $user->key = $this->generateKey($user->id);
+                $user = $this->Users->save($user);
+
                 $this->Auth->setUser($user->toArray());
                 $this->Flash->success(__('El Maestro fue creado exitosamente. Bienvenido ' . $user->name));
                 return $this->redirect($this->Auth->redirectUrl());
             }
+            //debug($user->errors());
             $this->Flash->error(__('Hubo un error al crear el Maestro. Por favor, intentelo nuevamente.'));
         }
         $this->set(compact('user'));
@@ -160,5 +165,16 @@ class UsersController extends AppController
         return $this->redirect($this->Auth->logout());
     }
 
+    private function generateKey($id)
+    {   
+        // mejorar generacion de key
+        //$idKey = strtoupper(dechex($id));
+        $chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $key = '';
+        for ($i = 0; $i < 8; $i++) {
+            $key .= $chars[mt_rand(0, 35)];
+        }
+        return $key;
+    }
 
 }

@@ -33,4 +33,13 @@
 }
 .map #map {
     height: 500px;
+    text-align: center;
+    padding-top: 20px;
+}
+small.keys {
+	font-family: serif;
+	float: right;
+}
+small.keys span, small.keys b {
+	margin-right: 10px;
 }
