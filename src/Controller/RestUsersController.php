@@ -74,7 +74,7 @@ class RestUsersController extends AppController
 
                     $notification = $this->Notifications->newEntity();
                     $notification->title = "Dispositivo";
-                    $notification->body = $user->name + " ha sido agregado";
+                    $notification->body = $user->name . " ha sido agregado";
                     $notification->sender_id = $user->id;
                     $notification->receiver_id = $master->id;
                     $this->Notifications->save($notification);
