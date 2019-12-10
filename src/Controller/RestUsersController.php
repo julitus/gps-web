@@ -28,7 +28,7 @@ class RestUsersController extends AppController
                     $status = '200';
                     $message = 'Ok';
                 } else {
-                    $status = '204';
+                    $status = '203';
                     $message = 'El usuario no corresponde al Dispositivo registrado';
                     $user = null;    
                 }
