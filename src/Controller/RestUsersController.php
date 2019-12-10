@@ -24,8 +24,14 @@ class RestUsersController extends AppController
 
         if (!is_null($user)) {
             if ((new DefaultPasswordHasher)->check($this->request->data['password'], $user->password)) {
-                $status = '200';
-                $message = 'Ok';
+                if ($this->request->data['phone'] == $user->phone) {
+                    $status = '200';
+                    $message = 'Ok';
+                } else {
+                    $status = '204';
+                    $message = 'El usuario no corresponde al Dispositivo registrado';
+                    $user = null;    
+                }
             } else {
                 $status = '401';
                 $message = 'Contraseña incorrecta';
