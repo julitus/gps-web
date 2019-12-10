@@ -14,6 +14,7 @@ class RestUsersController extends AppController
         parent::initialize();
         $this->loadComponent('RequestHandler');
         $this->loadModel('Users');
+        $this->loadModel('Notifications');
 
         $this->Auth->allow(['register', 'signin']);
     }
@@ -70,6 +71,14 @@ class RestUsersController extends AppController
 	            $this->request->data['repassword'] = $this->request->data['password'];
 	            $user = $this->Users->patchEntity($user, $this->request->data);
 	            if ($user = $this->Users->save($user)) {
+
+                    $notification = $this->Notifications->newEntity();
+                    $notification->title = "Dispositivo";
+                    $notification->body = $user->name + " ha sido agregado";
+                    $notification->sender_id = $user->id;
+                    $notification->receiver_id = $master->id;
+                    $this->Notifications->save($notification);
+
 	                $status = '200';
 	                $message = 'Ok';
 	                $response = $user;
