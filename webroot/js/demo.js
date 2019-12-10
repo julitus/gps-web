@@ -382,18 +382,57 @@ function initGoogleMaps($idDiv, $positions, $zoom){
             title: markers[i][0] + " (" + markers[i][3] + ")",
             icon: {                             
                 url: url + colors[i % colors.length] + "-dot.png"
-            }
-            /*label: {
-              text: '$' + $stores[i]['final_price'],
-              color: '#00ad45',
-              fontSize: '13px',
+            },
+            label: {
+              text: markers[i][0],
+              color: '#3c3f48',
+              fontSize: '20px',
               fontWeight: '700'
-            },*/
+            }
         });
     }
 
     map.fitBounds(bounds);
 }
+
+function initGoogleMapsHistory($idDiv, $positions, $zoom){
+
+    var urlColors = ["http://maps.google.com/mapfiles/kml/pal4/icon49.png", "http://maps.google.com/mapfiles/ms/icons/orange-dot.png"];
+
+    var mapOptions = {
+      zoom: $zoom,
+      scrollwheel: false, //we disable de scroll over the map, it is a really annoing when you scroll through page
+      styles: [{"featureType":"water","stylers":[{"saturation":43},{"lightness":-11},{"hue":"#0088ff"}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"hue":"#ff0000"},{"saturation":-100},{"lightness":99}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"color":"#808080"},{"lightness":54}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#ece2d9"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#ccdca1"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#767676"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#b8cb93"}]},{"featureType":"poi.park","stylers":[{"visibility":"on"}]},{"featureType":"poi.sports_complex","stylers":[{"visibility":"on"}]},{"featureType":"poi.medical","stylers":[{"visibility":"on"}]},{"featureType":"poi.business","stylers":[{"visibility":"simplified"}]}]
+
+    };
+
+    var bounds = new google.maps.LatLngBounds();
+    var map = new google.maps.Map(document.getElementById($idDiv), mapOptions);
+    var markers = [];
+
+    $.each($positions, function( index, value ) {
+        markers.push([value['lat'], value['lng'], value['date']]);
+    });
+
+    for( i = 0; i < markers.length; i++ ) {
+        var position = new google.maps.LatLng(markers[i][0], markers[i][1]);
+        bounds.extend(position);
+        marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: "(" + markers[i][2] + ")",
+            icon: {                             
+                url: urlColors[(i + 1 < markers.length) ? 0 : 1]
+            }
+        });
+    }
+
+    map.fitBounds(bounds);
+}
+
+$( "#button-reload" ).click(function() {
+  location.reload(true);
+});
 
 
 $( document ).ready(function() {
@@ -410,13 +449,32 @@ $( document ).ready(function() {
     if ($('#map').length > 0) {
         //$().ready(function(){
             var $positions = $('#map').data("positions");
-            console.log($positions);
             if ($positions.length > 0) {
                 initGoogleMaps('map', $positions, 16);
             } else {
                 $('.map #map').html('<span style="margin: 20px;">No tiene ningun dispositivo agregado.</span>');
             }
         //});
+    }
+
+    if ($('#map-history').length > 0) {
+        //$().ready(function(){
+            var $positions = $('#map-history').data("positions");
+            if ($positions.length > 0) {
+                initGoogleMapsHistory('map-history', $positions, 16);
+            } else {
+                $('.map #map-history').html('<span style="margin: 20px;">No se ha registrado ninguna posicion del dispositivo.</span>');
+            }
+        //});
+    }
+
+    if ($('#countdown-reload').length > 0) {
+        (function countdown(remaining) {
+            if(remaining <= 0)
+                location.reload(true);
+            $('#countdown-reload').html(remaining + " seg");
+            setTimeout(function(){ countdown(remaining - 1); }, 1000);
+        })(60);
     }
 
 });

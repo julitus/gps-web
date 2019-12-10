@@ -19,8 +19,8 @@
         <!-- Messages: style can be found in dropdown.less-->
         <li class="dropdown messages-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-bell-o"></i>
-            <span class="label label-success"><?= $session_notifications->count() ?></span>
+            <i class="fa fa-mobile"></i>
+            <span class="label label-warning"><?= $session_notifications->count() ?></span>
           </a>
           <ul class="dropdown-menu">
             <li class="header">Tu tienes <?= $session_notifications->count() ?> dispositivos enlazados</li>

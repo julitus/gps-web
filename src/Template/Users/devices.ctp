@@ -31,7 +31,7 @@
               <th><?= $this->Paginator->sort('phone', 'Teléfono') ?></th>
               <th><?= $this->Paginator->sort('phone', 'Nombre') ?></th>
               <th><?= $this->Paginator->sort('phone', 'Visualización') ?></th>
-              <!--th scope="col" class="actions"><?= __('Acciones') ?></th-->
+              <th scope="col" class="actions"><?= __('Historial') ?></th>
             </tr>
             <?php foreach ($devices as $key => $device): ?>
               <tr>
@@ -40,7 +40,7 @@
                 <td><?= $device->phone ?></td>
                 <td><?= $device->name ?></td>
                 <td><?= ($device->location ? '<span class="label label-success">Si</span>' : '<span class="label label-error">No</span>') ?></td>
-                <!--td></td-->
+                <td><?= $this->Html->link(__('<i class="fa fa-history"></i> Ver'), ['controller' => 'positions', 'action' => 'history', $device->id], ['escape' => false]) ?></td>
               </tr>
               <?php endforeach; ?>
           </table>

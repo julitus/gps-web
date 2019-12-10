@@ -1,7 +1,7 @@
 <section class="content-header gps-page" data-sidebar="map">
   <h1>
     Mapa de Dispositivos
-    <small></small>
+    <small class="keys"> </span> <i id="countdown-reload"></i> <button id="button-reload" class="btn btn-warning"><i class="fa fa-refresh"></i></button></small>
   </h1>
 </section>
 

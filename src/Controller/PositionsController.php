@@ -30,6 +30,21 @@ class PositionsController extends AppController
         $this->set('_serialize', ['positions']);
     }
 
+    public function history($id = null)
+    {
+        $user = $this->Positions->Users->get($id);
+
+        $positions = $this->Positions->find()
+            ->select(['Positions.created', 'Positions.lat', 'Positions.lng'])
+            ->where(['Positions.user_id' => $id])
+            ->order(['Positions.created' => 'ASC']);
+
+        //debug($user); debug($positions->toArray()); exit();
+
+        $this->set(compact('positions', 'user'));
+        $this->set('_serialize', ['positions']);
+    }
+
     /**
      * Index method
      *

@@ -31,7 +31,7 @@
     font-size: 16px;
     padding-top: 7px;
 }
-.map #map {
+.map #map, .map #map-history {
     height: 500px;
     text-align: center;
     padding-top: 20px;
