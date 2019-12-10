@@ -20,17 +20,17 @@
         <li class="dropdown messages-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-bell-o"></i>
-            <span class="label label-success"><?= $this->request->session()->read('Auth.User.news') ?></span>
+            <span class="label label-success"><?= $session_notifications->count() ?></span>
           </a>
           <ul class="dropdown-menu">
-            <li class="header">Tu tienes <?= $session_notifications->count() ?> notificaciones</li>
+            <li class="header">Tu tienes <?= $session_notifications->count() ?> dispositivos enlazados</li>
             <li>
               <ul class="menu">
                 <?php foreach ($session_notifications as $key => $not): ?>
                 <li>
                   <a href="#">
                     <div class="pull-left">
-                      <span class="img-circle"><?= substr($this->request->session()->read('Auth.User.name'), 0, 2) ?></span>
+                      <span class="img-circle"><?= substr($not->sender->name, 0, 2) ?></span>
                     </div>
                     <h4>
                       <?= $not->title ?>
