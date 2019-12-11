@@ -122,11 +122,16 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
             if ($user) {
-                $this->Auth->setUser($user);
-                $this->Flash->success(__('Bienvenido ' . $user['name']));
-                return $this->redirect($this->Auth->redirectUrl());
+                if ($user['role'] == 1) {
+                    $this->Auth->setUser($user);
+                    $this->Flash->success(__('Bienvenido ' . $user['name']));
+                    return $this->redirect($this->Auth->redirectUrl());
+                } else {
+                    $this->Flash->error(__('La cuenta ingresada no es de un Maestro.'));
+                }
+            } else {
+                $this->Flash->error(__('Correo electrónico o contraseña invalidos, Pruebe nuevamente.'));
             }
-            $this->Flash->error(__('Correo electrónico o contraseña invalidos, Pruebe nuevamente.'));
         }
     }
 
@@ -146,7 +151,6 @@ class UsersController extends AppController
                 $this->Flash->success(__('El Maestro fue creado exitosamente. Bienvenido ' . $user->name));
                 return $this->redirect($this->Auth->redirectUrl());
             }
-            //debug($user->errors());
             $this->Flash->error(__('Hubo un error al crear el Maestro. Por favor, intentelo nuevamente.'));
         }
         $this->set(compact('user'));
